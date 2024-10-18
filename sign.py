@@ -1,56 +1,3 @@
-# import cv2
-# import numpy as np
-# import tensorflow as tf
-
-# # Load the trained model
-# model = tf.keras.models.load_model('sign_language_model.h5')
-
-# # Load Label Encoder for decoding predictions
-# import joblib
-# label_encoder = joblib.load('label_encoder.pkl')  # Make sure to save and load the label encoder
-
-# def preprocess_frame(frame):
-#     # Resize frame to 32x32 (same size used during training)
-#     frame_resized = cv2.resize(frame, (32, 32))
-#     # Normalize pixel values to 0-1
-#     frame_resized = frame_resized / 255.0
-#     # Expand dimensions to match model input shape (1, 32, 32, 3)
-#     frame_resized = np.expand_dims(frame_resized, axis=0)
-#     return frame_resized
-
-# # Capture video from webcam
-# cap = cv2.VideoCapture(0)
-
-# while True:
-#     ret, frame = cap.read()
-#     if not ret:
-#         break
-
-#     # Preprocess the frame
-#     frame_preprocessed = preprocess_frame(frame)
-
-#     # Predict the class
-#     prediction = model.predict(frame_preprocessed)
-#     predicted_class = np.argmax(prediction)
-
-#     # Decode the predicted class
-#     predicted_label = label_encoder.inverse_transform([predicted_class])[0]
-
-#     # Display the prediction on the frame
-#     cv2.putText(frame, predicted_label, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
-
-#     # Show the frame
-#     cv2.imshow('Sign Language Detection', frame)
-
-#     # Break the loop on 'q' key press
-#     if cv2.waitKey(1) & 0xFF == ord('q'):
-#         break
-
-# # Release the webcam and close windows
-# cap.release()
-# cv2.destroyAllWindows()
-
-
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -175,17 +122,21 @@ main_frame.pack()
 live_feed_label = Label(main_frame)
 live_feed_label.grid(row=0, column=0)
 
-# Create a label to display the predicted word on the right side
-word_label = Label(main_frame, text="Predicted Sign: ", font=("Helvetica", 16))
-word_label.grid(row=0, column=1, padx=10)
+# Create a frame for the prediction label and the snapshot
+prediction_frame = Frame(main_frame)
+prediction_frame.grid(row=0, column=1, padx=10)
+
+# Create a label to display the predicted word
+word_label = Label(prediction_frame, text="Predicted Sign: ", font=("Helvetica", 16))
+word_label.pack(pady=10)
+
+# Label to display the snapshot with the black background, placed below the predicted sign
+canvas_label = Label(prediction_frame)
+canvas_label.pack()
 
 # Create a button to capture a snapshot and predict
 capture_button = Button(root, text="Capture and Predict", command=capture_snapshot)
 capture_button.pack(pady=20)
-
-# Label to display the snapshot with the black background
-canvas_label = Label(root)
-canvas_label.pack()
 
 # Start updating the real-time webcam feed
 update_webcam_feed()
