@@ -14,11 +14,11 @@ label_encoder = joblib.load('label_encoder.pkl')
 # Function to preprocess the frame for prediction
 def preprocess_frame(frame):
     # Resize frame to 32x32 (small window size for hand)
-    frame_resized = cv2.resize(frame, (32, 32))
+    frame_resized = cv2.resize(frame, (64, 64))
     # Normalize pixel values to 0-1
     frame_resized = frame_resized / 255.0
     # Expand dimensions to match model input shape (1, 32, 32, 3)
-    frame_resized = np.expand_dims(frame_resized, axis=0)
+    # frame_resized = np.expand_dims(frame_resized, axis=0)
     return frame_resized
 
 # Function to predict the sign from a captured frame
