@@ -256,6 +256,10 @@ def update_webcam_feed():
     # Repeat the function after 10 milliseconds
     live_feed_label.after(10, update_webcam_feed)
 
+def auto_predict():
+    capture_snapshot()
+    root.after(2000, auto_predict)
+
 # Initialize the webcam
 cap = cv2.VideoCapture(0)
 
@@ -289,6 +293,8 @@ capture_button.pack(pady=20)
 
 # Start updating the real-time webcam feed
 update_webcam_feed()
+
+auto_predict()
 
 # Start the Tkinter main loop
 root.mainloop()
